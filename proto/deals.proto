@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package deals;
+
+option go_package = "proto/deals;deals";
+
+service DealsService {
+  rpc CreateDeal (CreateDealRequest) returns (DealResponse);
+  rpc GetDeal (GetDealRequest) returns (DealResponse);
+  rpc ListDeals (Empty) returns (DealsList);
+}
+
+message CreateDealRequest {
+  string contact_id = 1;
+  string title = 2;
+  double amount = 3;
+  string stage = 4; // ejemplo: "open", "won", "lost"
+}
+
+message GetDealRequest {
+  string id = 1;
+}
+
+message DealResponse {
+  string id = 1;
+  string contact_id = 2;
+  string title = 3;
+  double amount = 4;
+  string stage = 5;
+}
+
+message DealsList {
+  repeated DealResponse deals = 1;
+}
+
+message Empty {}

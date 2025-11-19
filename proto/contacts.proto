@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package contacts;
+
+option go_package = "proto/contacts;contacts";
+
+// Servicio principal de contactos
+service ContactsService {
+  rpc CreateContact (CreateContactRequest) returns (ContactResponse);
+  rpc GetContact (GetContactRequest) returns (ContactResponse);
+  rpc ListContacts (Empty) returns (ContactsList);
+  rpc DeleteContact (DeleteContactRequest) returns (DeleteResponse);
+}
+
+// Mensajes de solicitud y respuesta
+message CreateContactRequest {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
+message GetContactRequest {
+  string id = 1;
+}
+
+message DeleteContactRequest {
+  string id = 1;
+}
+
+message ContactResponse {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+}
+
+message ContactsList {
+  repeated ContactResponse contacts = 1;
+}
+
+message DeleteResponse {
+  bool success = 1;
+}
+
+message Empty {}

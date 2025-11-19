@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package gateway;
+
+option go_package = "proto/gateway;gateway";
+
+service GatewayService {
+  rpc CreateContact (ContactRequest) returns (ContactResponse);
+  rpc GetContact (ContactId) returns (ContactResponse);
+
+  rpc CreateDeal (DealRequest) returns (DealResponse);
+  rpc GetDeal (DealId) returns (DealResponse);
+}
+
+// Contactos
+message ContactRequest {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+}
+
+message ContactResponse {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+}
+
+message ContactId {
+  string id = 1;
+}
+
+// Deals
+message DealRequest {
+  string contact_id = 1;
+  string title = 2;
+  double amount = 3;
+  string stage = 4;
+}
+
+message DealResponse {
+  string id = 1;
+  string contact_id = 2;
+  string title = 3;
+  double amount = 4;
+  string stage = 5;
+}
+
+message DealId {
+  string id = 1;
+}
