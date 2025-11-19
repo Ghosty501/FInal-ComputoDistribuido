@@ -22,11 +22,14 @@ const (
 )
 
 type CreateDealRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ContactId     string                 `protobuf:"bytes,1,opt,name=contact_id,json=contactId,proto3" json:"contact_id,omitempty"`
-	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Amount        float64                `protobuf:"fixed64,3,opt,name=amount,proto3" json:"amount,omitempty"`
-	Stage         string                 `protobuf:"bytes,4,opt,name=stage,proto3" json:"stage,omitempty"` // ejemplo: "open", "won", "lost"
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	ContactId string                 `protobuf:"bytes,1,opt,name=contact_id,json=contactId,proto3" json:"contact_id,omitempty"`
+	Title     string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Amount    float64                `protobuf:"fixed64,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	Stage     string                 `protobuf:"bytes,4,opt,name=stage,proto3" json:"stage,omitempty"`
+	// AÑADIR LOS CAMPOS FALTANTES QUE TU CÓDIGO GO ESPERA
+	Currency      string `protobuf:"bytes,5,opt,name=currency,proto3" json:"currency,omitempty"` // Añadido
+	Status        string `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`     // Añadido
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -89,6 +92,20 @@ func (x *CreateDealRequest) GetStage() string {
 	return ""
 }
 
+func (x *CreateDealRequest) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *CreateDealRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
 type GetDealRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -134,12 +151,17 @@ func (x *GetDealRequest) GetId() string {
 }
 
 type DealResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	ContactId     string                 `protobuf:"bytes,2,opt,name=contact_id,json=contactId,proto3" json:"contact_id,omitempty"`
-	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
-	Amount        float64                `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	Stage         string                 `protobuf:"bytes,5,opt,name=stage,proto3" json:"stage,omitempty"`
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ContactId string                 `protobuf:"bytes,2,opt,name=contact_id,json=contactId,proto3" json:"contact_id,omitempty"`
+	Title     string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Amount    float64                `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Stage     string                 `protobuf:"bytes,5,opt,name=stage,proto3" json:"stage,omitempty"`
+	// AÑADIR LOS CAMPOS FALTANTES QUE TU CÓDIGO GO ESPERA (coinciden con línea 58)
+	Currency      string `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`                    // Añadido
+	Status        string `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`                        // Añadido
+	CreatedAt     string `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // Se asume string por la función nowString()
+	UpdatedAt     string `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // Se asume string por la función nowString()
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -209,6 +231,182 @@ func (x *DealResponse) GetStage() string {
 	return ""
 }
 
+func (x *DealResponse) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *DealResponse) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *DealResponse) GetCreatedAt() string {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return ""
+}
+
+func (x *DealResponse) GetUpdatedAt() string {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return ""
+}
+
+type UpdateDealStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Status        string                 `protobuf:"bytes,2,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateDealStatusRequest) Reset() {
+	*x = UpdateDealStatusRequest{}
+	mi := &file_proto_deals_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateDealStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateDealStatusRequest) ProtoMessage() {}
+
+func (x *UpdateDealStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_deals_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateDealStatusRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDealStatusRequest) Descriptor() ([]byte, []int) {
+	return file_proto_deals_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UpdateDealStatusRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *UpdateDealStatusRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+type DeleteDealRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDealRequest) Reset() {
+	*x = DeleteDealRequest{}
+	mi := &file_proto_deals_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDealRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDealRequest) ProtoMessage() {}
+
+func (x *DeleteDealRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_deals_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDealRequest.ProtoReflect.Descriptor instead.
+func (*DeleteDealRequest) Descriptor() ([]byte, []int) {
+	return file_proto_deals_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DeleteDealRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type DeleteResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteResponse) Reset() {
+	*x = DeleteResponse{}
+	mi := &file_proto_deals_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteResponse) ProtoMessage() {}
+
+func (x *DeleteResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_deals_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteResponse.ProtoReflect.Descriptor instead.
+func (*DeleteResponse) Descriptor() ([]byte, []int) {
+	return file_proto_deals_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DeleteResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 type DealsList struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Deals         []*DealResponse        `protobuf:"bytes,1,rep,name=deals,proto3" json:"deals,omitempty"`
@@ -218,7 +416,7 @@ type DealsList struct {
 
 func (x *DealsList) Reset() {
 	*x = DealsList{}
-	mi := &file_proto_deals_proto_msgTypes[3]
+	mi := &file_proto_deals_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -230,7 +428,7 @@ func (x *DealsList) String() string {
 func (*DealsList) ProtoMessage() {}
 
 func (x *DealsList) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_deals_proto_msgTypes[3]
+	mi := &file_proto_deals_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -243,7 +441,7 @@ func (x *DealsList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DealsList.ProtoReflect.Descriptor instead.
 func (*DealsList) Descriptor() ([]byte, []int) {
-	return file_proto_deals_proto_rawDescGZIP(), []int{3}
+	return file_proto_deals_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *DealsList) GetDeals() []*DealResponse {
@@ -261,7 +459,7 @@ type Empty struct {
 
 func (x *Empty) Reset() {
 	*x = Empty{}
-	mi := &file_proto_deals_proto_msgTypes[4]
+	mi := &file_proto_deals_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -273,7 +471,7 @@ func (x *Empty) String() string {
 func (*Empty) ProtoMessage() {}
 
 func (x *Empty) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_deals_proto_msgTypes[4]
+	mi := &file_proto_deals_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -286,37 +484,56 @@ func (x *Empty) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Empty.ProtoReflect.Descriptor instead.
 func (*Empty) Descriptor() ([]byte, []int) {
-	return file_proto_deals_proto_rawDescGZIP(), []int{4}
+	return file_proto_deals_proto_rawDescGZIP(), []int{7}
 }
 
 var File_proto_deals_proto protoreflect.FileDescriptor
 
 const file_proto_deals_proto_rawDesc = "" +
 	"\n" +
-	"\x11proto/deals.proto\x12\x05deals\"v\n" +
+	"\x11proto/deals.proto\x12\x05deals\"\xaa\x01\n" +
 	"\x11CreateDealRequest\x12\x1d\n" +
 	"\n" +
 	"contact_id\x18\x01 \x01(\tR\tcontactId\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x16\n" +
 	"\x06amount\x18\x03 \x01(\x01R\x06amount\x12\x14\n" +
-	"\x05stage\x18\x04 \x01(\tR\x05stage\" \n" +
+	"\x05stage\x18\x04 \x01(\tR\x05stage\x12\x1a\n" +
+	"\bcurrency\x18\x05 \x01(\tR\bcurrency\x12\x16\n" +
+	"\x06status\x18\x06 \x01(\tR\x06status\" \n" +
 	"\x0eGetDealRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\x81\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xf3\x01\n" +
 	"\fDealResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
 	"contact_id\x18\x02 \x01(\tR\tcontactId\x12\x14\n" +
 	"\x05title\x18\x03 \x01(\tR\x05title\x12\x16\n" +
 	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12\x14\n" +
-	"\x05stage\x18\x05 \x01(\tR\x05stage\"6\n" +
+	"\x05stage\x18\x05 \x01(\tR\x05stage\x12\x1a\n" +
+	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12\x16\n" +
+	"\x06status\x18\a \x01(\tR\x06status\x12\x1d\n" +
+	"\n" +
+	"created_at\x18\b \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"\n" +
+	"updated_at\x18\t \x01(\tR\tupdatedAt\"A\n" +
+	"\x17UpdateDealStatusRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
+	"\x06status\x18\x02 \x01(\tR\x06status\"#\n" +
+	"\x11DeleteDealRequest\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"D\n" +
+	"\x0eDeleteResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"6\n" +
 	"\tDealsList\x12)\n" +
 	"\x05deals\x18\x01 \x03(\v2\x13.deals.DealResponseR\x05deals\"\a\n" +
-	"\x05Empty2\xaf\x01\n" +
+	"\x05Empty2\xb7\x02\n" +
 	"\fDealsService\x12;\n" +
 	"\n" +
 	"CreateDeal\x12\x18.deals.CreateDealRequest\x1a\x13.deals.DealResponse\x125\n" +
 	"\aGetDeal\x12\x15.deals.GetDealRequest\x1a\x13.deals.DealResponse\x12+\n" +
-	"\tListDeals\x12\f.deals.Empty\x1a\x10.deals.DealsListB\x13Z\x11proto/deals;dealsb\x06proto3"
+	"\tListDeals\x12\f.deals.Empty\x1a\x10.deals.DealsList\x12G\n" +
+	"\x10UpdateDealStatus\x12\x1e.deals.UpdateDealStatusRequest\x1a\x13.deals.DealResponse\x12=\n" +
+	"\n" +
+	"DeleteDeal\x12\x18.deals.DeleteDealRequest\x1a\x15.deals.DeleteResponseB\x13Z\x11proto/deals;dealsb\x06proto3"
 
 var (
 	file_proto_deals_proto_rawDescOnce sync.Once
@@ -330,24 +547,31 @@ func file_proto_deals_proto_rawDescGZIP() []byte {
 	return file_proto_deals_proto_rawDescData
 }
 
-var file_proto_deals_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_proto_deals_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_proto_deals_proto_goTypes = []any{
-	(*CreateDealRequest)(nil), // 0: deals.CreateDealRequest
-	(*GetDealRequest)(nil),    // 1: deals.GetDealRequest
-	(*DealResponse)(nil),      // 2: deals.DealResponse
-	(*DealsList)(nil),         // 3: deals.DealsList
-	(*Empty)(nil),             // 4: deals.Empty
+	(*CreateDealRequest)(nil),       // 0: deals.CreateDealRequest
+	(*GetDealRequest)(nil),          // 1: deals.GetDealRequest
+	(*DealResponse)(nil),            // 2: deals.DealResponse
+	(*UpdateDealStatusRequest)(nil), // 3: deals.UpdateDealStatusRequest
+	(*DeleteDealRequest)(nil),       // 4: deals.DeleteDealRequest
+	(*DeleteResponse)(nil),          // 5: deals.DeleteResponse
+	(*DealsList)(nil),               // 6: deals.DealsList
+	(*Empty)(nil),                   // 7: deals.Empty
 }
 var file_proto_deals_proto_depIdxs = []int32{
 	2, // 0: deals.DealsList.deals:type_name -> deals.DealResponse
 	0, // 1: deals.DealsService.CreateDeal:input_type -> deals.CreateDealRequest
 	1, // 2: deals.DealsService.GetDeal:input_type -> deals.GetDealRequest
-	4, // 3: deals.DealsService.ListDeals:input_type -> deals.Empty
-	2, // 4: deals.DealsService.CreateDeal:output_type -> deals.DealResponse
-	2, // 5: deals.DealsService.GetDeal:output_type -> deals.DealResponse
-	3, // 6: deals.DealsService.ListDeals:output_type -> deals.DealsList
-	4, // [4:7] is the sub-list for method output_type
-	1, // [1:4] is the sub-list for method input_type
+	7, // 3: deals.DealsService.ListDeals:input_type -> deals.Empty
+	3, // 4: deals.DealsService.UpdateDealStatus:input_type -> deals.UpdateDealStatusRequest
+	4, // 5: deals.DealsService.DeleteDeal:input_type -> deals.DeleteDealRequest
+	2, // 6: deals.DealsService.CreateDeal:output_type -> deals.DealResponse
+	2, // 7: deals.DealsService.GetDeal:output_type -> deals.DealResponse
+	6, // 8: deals.DealsService.ListDeals:output_type -> deals.DealsList
+	2, // 9: deals.DealsService.UpdateDealStatus:output_type -> deals.DealResponse
+	5, // 10: deals.DealsService.DeleteDeal:output_type -> deals.DeleteResponse
+	6, // [6:11] is the sub-list for method output_type
+	1, // [1:6] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -364,7 +588,7 @@ func file_proto_deals_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_deals_proto_rawDesc), len(file_proto_deals_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -8,13 +8,19 @@ service DealsService {
   rpc CreateDeal (CreateDealRequest) returns (DealResponse);
   rpc GetDeal (GetDealRequest) returns (DealResponse);
   rpc ListDeals (Empty) returns (DealsList);
+  rpc UpdateDealStatus (UpdateDealStatusRequest) returns (DealResponse); // Ejemplo: Añadir RPC de actualización
+  rpc DeleteDeal (DeleteDealRequest) returns (DeleteResponse);           // Ejemplo: Añadir RPC de eliminación
 }
 
 message CreateDealRequest {
   string contact_id = 1;
   string title = 2;
   double amount = 3;
-  string stage = 4; // ejemplo: "open", "won", "lost"
+  string stage = 4;
+  
+  // AÑADIR LOS CAMPOS FALTANTES QUE TU CÓDIGO GO ESPERA
+  string currency = 5; // Añadido
+  string status = 6;   // Añadido
 }
 
 message GetDealRequest {
@@ -27,6 +33,28 @@ message DealResponse {
   string title = 3;
   double amount = 4;
   string stage = 5;
+  
+  // AÑADIR LOS CAMPOS FALTANTES QUE TU CÓDIGO GO ESPERA (coinciden con línea 58)
+  string currency = 6;    // Añadido
+  string status = 7;      // Añadido
+  string created_at = 8;  // Se asume string por la función nowString()
+  string updated_at = 9;  // Se asume string por la función nowString()
+}
+
+// AÑADIR LOS MENSAJES FALTANTES (Para resolver errores de líneas 88, 100)
+
+message UpdateDealStatusRequest { // Resuelve "undefined: pb.UpdateDealStatusRequest"
+    string id = 1;
+    string status = 2;
+}
+
+message DeleteDealRequest { // Resuelve "undefined: pb.DeleteDealRequest"
+    string id = 1;
+}
+
+message DeleteResponse { // Resuelve error de respuesta en DeleteDeal
+    bool success = 1;
+    string message = 2;
 }
 
 message DealsList {

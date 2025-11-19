@@ -19,9 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DealsService_CreateDeal_FullMethodName = "/deals.DealsService/CreateDeal"
-	DealsService_GetDeal_FullMethodName    = "/deals.DealsService/GetDeal"
-	DealsService_ListDeals_FullMethodName  = "/deals.DealsService/ListDeals"
+	DealsService_CreateDeal_FullMethodName       = "/deals.DealsService/CreateDeal"
+	DealsService_GetDeal_FullMethodName          = "/deals.DealsService/GetDeal"
+	DealsService_ListDeals_FullMethodName        = "/deals.DealsService/ListDeals"
+	DealsService_UpdateDealStatus_FullMethodName = "/deals.DealsService/UpdateDealStatus"
+	DealsService_DeleteDeal_FullMethodName       = "/deals.DealsService/DeleteDeal"
 )
 
 // DealsServiceClient is the client API for DealsService service.
@@ -31,6 +33,8 @@ type DealsServiceClient interface {
 	CreateDeal(ctx context.Context, in *CreateDealRequest, opts ...grpc.CallOption) (*DealResponse, error)
 	GetDeal(ctx context.Context, in *GetDealRequest, opts ...grpc.CallOption) (*DealResponse, error)
 	ListDeals(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DealsList, error)
+	UpdateDealStatus(ctx context.Context, in *UpdateDealStatusRequest, opts ...grpc.CallOption) (*DealResponse, error)
+	DeleteDeal(ctx context.Context, in *DeleteDealRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
 }
 
 type dealsServiceClient struct {
@@ -71,6 +75,26 @@ func (c *dealsServiceClient) ListDeals(ctx context.Context, in *Empty, opts ...g
 	return out, nil
 }
 
+func (c *dealsServiceClient) UpdateDealStatus(ctx context.Context, in *UpdateDealStatusRequest, opts ...grpc.CallOption) (*DealResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DealResponse)
+	err := c.cc.Invoke(ctx, DealsService_UpdateDealStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dealsServiceClient) DeleteDeal(ctx context.Context, in *DeleteDealRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, DealsService_DeleteDeal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DealsServiceServer is the server API for DealsService service.
 // All implementations must embed UnimplementedDealsServiceServer
 // for forward compatibility.
@@ -78,6 +102,8 @@ type DealsServiceServer interface {
 	CreateDeal(context.Context, *CreateDealRequest) (*DealResponse, error)
 	GetDeal(context.Context, *GetDealRequest) (*DealResponse, error)
 	ListDeals(context.Context, *Empty) (*DealsList, error)
+	UpdateDealStatus(context.Context, *UpdateDealStatusRequest) (*DealResponse, error)
+	DeleteDeal(context.Context, *DeleteDealRequest) (*DeleteResponse, error)
 	mustEmbedUnimplementedDealsServiceServer()
 }
 
@@ -96,6 +122,12 @@ func (UnimplementedDealsServiceServer) GetDeal(context.Context, *GetDealRequest)
 }
 func (UnimplementedDealsServiceServer) ListDeals(context.Context, *Empty) (*DealsList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListDeals not implemented")
+}
+func (UnimplementedDealsServiceServer) UpdateDealStatus(context.Context, *UpdateDealStatusRequest) (*DealResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateDealStatus not implemented")
+}
+func (UnimplementedDealsServiceServer) DeleteDeal(context.Context, *DeleteDealRequest) (*DeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeal not implemented")
 }
 func (UnimplementedDealsServiceServer) mustEmbedUnimplementedDealsServiceServer() {}
 func (UnimplementedDealsServiceServer) testEmbeddedByValue()                      {}
@@ -172,6 +204,42 @@ func _DealsService_ListDeals_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DealsService_UpdateDealStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDealStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DealsServiceServer).UpdateDealStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DealsService_UpdateDealStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DealsServiceServer).UpdateDealStatus(ctx, req.(*UpdateDealStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DealsService_DeleteDeal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDealRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DealsServiceServer).DeleteDeal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DealsService_DeleteDeal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DealsServiceServer).DeleteDeal(ctx, req.(*DeleteDealRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DealsService_ServiceDesc is the grpc.ServiceDesc for DealsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +258,14 @@ var DealsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListDeals",
 			Handler:    _DealsService_ListDeals_Handler,
+		},
+		{
+			MethodName: "UpdateDealStatus",
+			Handler:    _DealsService_UpdateDealStatus_Handler,
+		},
+		{
+			MethodName: "DeleteDeal",
+			Handler:    _DealsService_DeleteDeal_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
