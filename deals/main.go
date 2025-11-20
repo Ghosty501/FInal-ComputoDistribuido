@@ -13,6 +13,7 @@ import (
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/reflection" // 1. Importar el paquete
 )
 
 func main() {
@@ -46,6 +47,8 @@ func main() {
 	grpcServer := grpc.NewServer()
 	srv := server.NewServer(contactsConn)
 	pb.RegisterDealsServiceServer(grpcServer, srv)
+
+	reflection.Register(grpcServer) // <--- ¡Añade esta línea!
 
 	log.Printf("🚀 deals server listening on %s", addr)
 	if err := grpcServer.Serve(lis); err != nil {
