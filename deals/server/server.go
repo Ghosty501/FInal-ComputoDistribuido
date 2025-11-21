@@ -62,6 +62,7 @@ func (s *DealServer) CreateDeal(ctx context.Context, req *pb.CreateDealRequest) 
 	}
 
 	s.deals[id] = deal
+	fmt.Printf("Deal creado: %+v\n", deal)
 	return deal, nil
 }
 
