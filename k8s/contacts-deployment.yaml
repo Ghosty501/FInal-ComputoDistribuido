@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: contacts-deployment
+  namespace: crm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: contacts
+  template:
+    metadata:
+      labels:
+        app: contacts
+    spec:
+      containers:
+        - name: contacts
+          image: armando/contacts:latest   # <-- reemplazar si tu nombre es otro
+          ports:
+            - containerPort: 50051
+          env:
+            - name: DB_HOST
+              value: "crm-db"              # será creado más adelante
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "crmuser"
+            - name: DB_PASS
+              value: "crmpassword"
+          readinessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 5
+            periodSeconds: 10
