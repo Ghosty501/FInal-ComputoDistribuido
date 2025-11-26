@@ -16,20 +16,26 @@ spec:
       containers:
         - name: deals
           image: armando/deals:latest    # <-- reemplaza si tu imagen es distinta
-          imagePullPolicy: Never 
+          imagePullPolicy: Never
           ports:
             - containerPort: 50052
           env:
+            # --- Variables de la Base de Datos (Confirmadas) ---
             - name: DB_HOST
               value: "crm-db"
             - name: DB_PORT
               value: "5432"
             - name: DB_USER
               value: "crmuser"
+            - name: DB_name
+              value: "crm_deals"
             - name: DB_PASS
               value: "crmpassword"
-            - name: CONTACTS_GRPC_ADDRESS
-              value: "contacts-service.crm.svc.cluster.local:50052"
+            # --- CORRECCIÓN: Conectividad al Servicio de Contacts ---
+            # Se cambia el nombre de la variable de entorno para coincidir con la variable
+            # que tu código Go espera (CONTACTS_ADDR) y se usa el puerto correcto (50051).
+            - name: CONTACTS_ADDR 
+              value: "contacts-service:50051"
           readinessProbe:
             tcpSocket:
               port: 50052

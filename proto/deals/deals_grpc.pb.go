@@ -24,6 +24,7 @@ const (
 	DealsService_ListDeals_FullMethodName        = "/deals.DealsService/ListDeals"
 	DealsService_UpdateDealStatus_FullMethodName = "/deals.DealsService/UpdateDealStatus"
 	DealsService_DeleteDeal_FullMethodName       = "/deals.DealsService/DeleteDeal"
+	DealsService_HealthCheck_FullMethodName      = "/deals.DealsService/HealthCheck"
 )
 
 // DealsServiceClient is the client API for DealsService service.
@@ -35,6 +36,7 @@ type DealsServiceClient interface {
 	ListDeals(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*DealsList, error)
 	UpdateDealStatus(ctx context.Context, in *UpdateDealStatusRequest, opts ...grpc.CallOption) (*DealResponse, error)
 	DeleteDeal(ctx context.Context, in *DeleteDealRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error)
 }
 
 type dealsServiceClient struct {
@@ -95,6 +97,16 @@ func (c *dealsServiceClient) DeleteDeal(ctx context.Context, in *DeleteDealReque
 	return out, nil
 }
 
+func (c *dealsServiceClient) HealthCheck(ctx context.Context, in *HealthCheckRequest, opts ...grpc.CallOption) (*HealthCheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(HealthCheckResponse)
+	err := c.cc.Invoke(ctx, DealsService_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DealsServiceServer is the server API for DealsService service.
 // All implementations must embed UnimplementedDealsServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type DealsServiceServer interface {
 	ListDeals(context.Context, *Empty) (*DealsList, error)
 	UpdateDealStatus(context.Context, *UpdateDealStatusRequest) (*DealResponse, error)
 	DeleteDeal(context.Context, *DeleteDealRequest) (*DeleteResponse, error)
+	HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error)
 	mustEmbedUnimplementedDealsServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedDealsServiceServer) UpdateDealStatus(context.Context, *Update
 }
 func (UnimplementedDealsServiceServer) DeleteDeal(context.Context, *DeleteDealRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteDeal not implemented")
+}
+func (UnimplementedDealsServiceServer) HealthCheck(context.Context, *HealthCheckRequest) (*HealthCheckResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
 }
 func (UnimplementedDealsServiceServer) mustEmbedUnimplementedDealsServiceServer() {}
 func (UnimplementedDealsServiceServer) testEmbeddedByValue()                      {}
@@ -240,6 +256,24 @@ func _DealsService_DeleteDeal_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DealsService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HealthCheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DealsServiceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: DealsService_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DealsServiceServer).HealthCheck(ctx, req.(*HealthCheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // DealsService_ServiceDesc is the grpc.ServiceDesc for DealsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var DealsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteDeal",
 			Handler:    _DealsService_DeleteDeal_Handler,
+		},
+		{
+			MethodName: "HealthCheck",
+			Handler:    _DealsService_HealthCheck_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

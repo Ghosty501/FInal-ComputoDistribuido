@@ -451,6 +451,87 @@ func (x *DealsList) GetDeals() []*DealResponse {
 	return nil
 }
 
+type HealthCheckRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HealthCheckRequest) Reset() {
+	*x = HealthCheckRequest{}
+	mi := &file_proto_deals_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HealthCheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthCheckRequest) ProtoMessage() {}
+
+func (x *HealthCheckRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_deals_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthCheckRequest.ProtoReflect.Descriptor instead.
+func (*HealthCheckRequest) Descriptor() ([]byte, []int) {
+	return file_proto_deals_proto_rawDescGZIP(), []int{7}
+}
+
+type HealthCheckResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Si no necesitas devolver nada, puedes dejar el mensaje vacío, o añadir un simple campo.
+	Success       bool `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *HealthCheckResponse) Reset() {
+	*x = HealthCheckResponse{}
+	mi := &file_proto_deals_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *HealthCheckResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HealthCheckResponse) ProtoMessage() {}
+
+func (x *HealthCheckResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_deals_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HealthCheckResponse.ProtoReflect.Descriptor instead.
+func (*HealthCheckResponse) Descriptor() ([]byte, []int) {
+	return file_proto_deals_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *HealthCheckResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
 type Empty struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -459,7 +540,7 @@ type Empty struct {
 
 func (x *Empty) Reset() {
 	*x = Empty{}
-	mi := &file_proto_deals_proto_msgTypes[7]
+	mi := &file_proto_deals_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -471,7 +552,7 @@ func (x *Empty) String() string {
 func (*Empty) ProtoMessage() {}
 
 func (x *Empty) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_deals_proto_msgTypes[7]
+	mi := &file_proto_deals_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -484,7 +565,7 @@ func (x *Empty) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Empty.ProtoReflect.Descriptor instead.
 func (*Empty) Descriptor() ([]byte, []int) {
-	return file_proto_deals_proto_rawDescGZIP(), []int{7}
+	return file_proto_deals_proto_rawDescGZIP(), []int{9}
 }
 
 var File_proto_deals_proto protoreflect.FileDescriptor
@@ -524,8 +605,11 @@ const file_proto_deals_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"6\n" +
 	"\tDealsList\x12)\n" +
-	"\x05deals\x18\x01 \x03(\v2\x13.deals.DealResponseR\x05deals\"\a\n" +
-	"\x05Empty2\xb7\x02\n" +
+	"\x05deals\x18\x01 \x03(\v2\x13.deals.DealResponseR\x05deals\"\x14\n" +
+	"\x12HealthCheckRequest\"/\n" +
+	"\x13HealthCheckResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\"\a\n" +
+	"\x05Empty2\xfd\x02\n" +
 	"\fDealsService\x12;\n" +
 	"\n" +
 	"CreateDeal\x12\x18.deals.CreateDealRequest\x1a\x13.deals.DealResponse\x125\n" +
@@ -533,7 +617,8 @@ const file_proto_deals_proto_rawDesc = "" +
 	"\tListDeals\x12\f.deals.Empty\x1a\x10.deals.DealsList\x12G\n" +
 	"\x10UpdateDealStatus\x12\x1e.deals.UpdateDealStatusRequest\x1a\x13.deals.DealResponse\x12=\n" +
 	"\n" +
-	"DeleteDeal\x12\x18.deals.DeleteDealRequest\x1a\x15.deals.DeleteResponseB\x13Z\x11proto/deals;dealsb\x06proto3"
+	"DeleteDeal\x12\x18.deals.DeleteDealRequest\x1a\x15.deals.DeleteResponse\x12D\n" +
+	"\vHealthCheck\x12\x19.deals.HealthCheckRequest\x1a\x1a.deals.HealthCheckResponseB\x13Z\x11proto/deals;dealsb\x06proto3"
 
 var (
 	file_proto_deals_proto_rawDescOnce sync.Once
@@ -547,7 +632,7 @@ func file_proto_deals_proto_rawDescGZIP() []byte {
 	return file_proto_deals_proto_rawDescData
 }
 
-var file_proto_deals_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_proto_deals_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_proto_deals_proto_goTypes = []any{
 	(*CreateDealRequest)(nil),       // 0: deals.CreateDealRequest
 	(*GetDealRequest)(nil),          // 1: deals.GetDealRequest
@@ -556,22 +641,26 @@ var file_proto_deals_proto_goTypes = []any{
 	(*DeleteDealRequest)(nil),       // 4: deals.DeleteDealRequest
 	(*DeleteResponse)(nil),          // 5: deals.DeleteResponse
 	(*DealsList)(nil),               // 6: deals.DealsList
-	(*Empty)(nil),                   // 7: deals.Empty
+	(*HealthCheckRequest)(nil),      // 7: deals.HealthCheckRequest
+	(*HealthCheckResponse)(nil),     // 8: deals.HealthCheckResponse
+	(*Empty)(nil),                   // 9: deals.Empty
 }
 var file_proto_deals_proto_depIdxs = []int32{
 	2, // 0: deals.DealsList.deals:type_name -> deals.DealResponse
 	0, // 1: deals.DealsService.CreateDeal:input_type -> deals.CreateDealRequest
 	1, // 2: deals.DealsService.GetDeal:input_type -> deals.GetDealRequest
-	7, // 3: deals.DealsService.ListDeals:input_type -> deals.Empty
+	9, // 3: deals.DealsService.ListDeals:input_type -> deals.Empty
 	3, // 4: deals.DealsService.UpdateDealStatus:input_type -> deals.UpdateDealStatusRequest
 	4, // 5: deals.DealsService.DeleteDeal:input_type -> deals.DeleteDealRequest
-	2, // 6: deals.DealsService.CreateDeal:output_type -> deals.DealResponse
-	2, // 7: deals.DealsService.GetDeal:output_type -> deals.DealResponse
-	6, // 8: deals.DealsService.ListDeals:output_type -> deals.DealsList
-	2, // 9: deals.DealsService.UpdateDealStatus:output_type -> deals.DealResponse
-	5, // 10: deals.DealsService.DeleteDeal:output_type -> deals.DeleteResponse
-	6, // [6:11] is the sub-list for method output_type
-	1, // [1:6] is the sub-list for method input_type
+	7, // 6: deals.DealsService.HealthCheck:input_type -> deals.HealthCheckRequest
+	2, // 7: deals.DealsService.CreateDeal:output_type -> deals.DealResponse
+	2, // 8: deals.DealsService.GetDeal:output_type -> deals.DealResponse
+	6, // 9: deals.DealsService.ListDeals:output_type -> deals.DealsList
+	2, // 10: deals.DealsService.UpdateDealStatus:output_type -> deals.DealResponse
+	5, // 11: deals.DealsService.DeleteDeal:output_type -> deals.DeleteResponse
+	8, // 12: deals.DealsService.HealthCheck:output_type -> deals.HealthCheckResponse
+	7, // [7:13] is the sub-list for method output_type
+	1, // [1:7] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -588,7 +677,7 @@ func file_proto_deals_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_deals_proto_rawDesc), len(file_proto_deals_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

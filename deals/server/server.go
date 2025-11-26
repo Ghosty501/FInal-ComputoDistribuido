@@ -2,7 +2,9 @@ package server
 
 import (
 	"context"
+	"database/sql" // Necesario para definir el tipo de conexión a DB
 	"fmt"
+	"log"
 	"sync"
 	"time"
 
@@ -10,6 +12,8 @@ import (
 	pb "CRM-V1/proto/deals"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type DealServer struct {
@@ -18,9 +22,11 @@ type DealServer struct {
 	deals          map[string]*pb.DealResponse
 	nextID         int
 	contactsClient contactsPb.ContactsServiceClient
+	DB             *sql.DB // AÑADIDO: Campo para la conexión a la DB
 }
 
-func NewServer(contactsConn *grpc.ClientConn) *DealServer {
+// NewServer ahora recibe la conexión a la DB como segundo argumento
+func NewServer(contactsConn *grpc.ClientConn, dbConn *sql.DB) *DealServer {
 	var c contactsPb.ContactsServiceClient
 	if contactsConn != nil {
 		c = contactsPb.NewContactsServiceClient(contactsConn)
@@ -29,6 +35,7 @@ func NewServer(contactsConn *grpc.ClientConn) *DealServer {
 		deals:          make(map[string]*pb.DealResponse),
 		nextID:         1,
 		contactsClient: c,
+		DB:             dbConn, // ASIGNADO: Se guarda la conexión (o nil, si no se usa DB)
 	}
 }
 
@@ -38,6 +45,7 @@ func nowString() string {
 
 func (s *DealServer) CreateDeal(ctx context.Context, req *pb.CreateDealRequest) (*pb.DealResponse, error) {
 	if s.contactsClient != nil {
+		// Validación de contacto existente
 		_, err := s.contactsClient.GetContact(ctx, &contactsPb.GetContactRequest{Id: req.ContactId})
 		if err != nil {
 			return nil, fmt.Errorf("contacto %s no encontrado: %w", req.ContactId, err)
@@ -107,4 +115,20 @@ func (s *DealServer) DeleteDeal(ctx context.Context, req *pb.DeleteDealRequest) 
 	}
 	delete(s.deals, req.Id)
 	return &pb.DeleteResponse{Success: true}, nil
+}
+
+// Implementación de HealthCheck
+func (s *DealServer) HealthCheck(ctx context.Context, req *pb.HealthCheckRequest) (*pb.HealthCheckResponse, error) {
+	// Si la DB es nil (como será en tu main.go), el servidor siempre reporta estar sano.
+	if s.DB != nil {
+		// Si el DB no es nil, hacemos la verificación real de la conexión
+		if err := s.DB.PingContext(ctx); err != nil {
+			log.Printf("DB Ping failed for Deals: %v", err)
+			// Devolvemos un error gRPC que el Gateway puede capturar (codes.Unavailable)
+			return nil, status.Errorf(codes.Unavailable, "database not ready: %v", err)
+		}
+	}
+
+	// Si la DB es nil o el ping fue exitoso, el servicio gRPC está vivo.
+	return &pb.HealthCheckResponse{Success: true}, nil
 }

@@ -8,12 +8,14 @@ import (
 	"os"
 	"time"
 
+	// NOTA: No se necesita "database/sql" ni código de conexión a DB aquí.
+
 	"CRM-V1/deals/server"
 	pb "CRM-V1/proto/deals"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/reflection" // 1. Importar el paquete
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -23,11 +25,12 @@ func main() {
 	}
 	addr := fmt.Sprintf(":%s", port)
 
-	contactsAddr := os.Getenv("CONTACTS_ADDR") // ej: "localhost:50051" o "contacts:50051" en K8s
+	contactsAddr := os.Getenv("CONTACTS_ADDR") // ej: "contacts-service:50051" en K8s
 	var contactsConn *grpc.ClientConn
 	if contactsAddr != "" {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 		defer cancel()
+		// El grpc.WithBlock() asegura que el Dial intente conectarse antes de continuar
 		conn, err := grpc.DialContext(ctx, contactsAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock())
 		if err != nil {
 			log.Printf("WARNING: no se pudo conectar a contacts en %s: %v (continuando en modo degradado)", contactsAddr, err)
@@ -45,10 +48,14 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer()
-	srv := server.NewServer(contactsConn)
+
+	// CAMBIO CLAVE: Pasamos contactsConn (primero) y nil para la DB (segundo)
+	// Ya que no estamos usando la DB real en este servicio por ahora.
+	srv := server.NewServer(contactsConn, nil)
+
 	pb.RegisterDealsServiceServer(grpcServer, srv)
 
-	reflection.Register(grpcServer) // <--- ¡Añade esta línea!
+	reflection.Register(grpcServer) // Habilitar la reflexión para depuración gRPC
 
 	log.Printf("🚀 deals server listening on %s", addr)
 	if err := grpcServer.Serve(lis); err != nil {

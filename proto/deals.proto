@@ -9,7 +9,8 @@ service DealsService {
   rpc GetDeal (GetDealRequest) returns (DealResponse);
   rpc ListDeals (Empty) returns (DealsList);
   rpc UpdateDealStatus (UpdateDealStatusRequest) returns (DealResponse); // Ejemplo: Añadir RPC de actualización
-  rpc DeleteDeal (DeleteDealRequest) returns (DeleteResponse);           // Ejemplo: Añadir RPC de eliminación
+  rpc DeleteDeal (DeleteDealRequest) returns (DeleteResponse);           
+  rpc HealthCheck (HealthCheckRequest) returns (HealthCheckResponse); // Ejemplo: Añadir RPC de eliminación
 }
 
 message CreateDealRequest {
@@ -59,6 +60,13 @@ message DeleteResponse { // Resuelve error de respuesta en DeleteDeal
 
 message DealsList {
   repeated DealResponse deals = 1;
+}
+
+message HealthCheckRequest {}
+
+message HealthCheckResponse {
+    // Si no necesitas devolver nada, puedes dejar el mensaje vacío, o añadir un simple campo.
+    bool success = 1;
 }
 
 message Empty {}
